@@ -1,0 +1,1225 @@
+#Some useful metainformation
+swagger: '2.0'
+info:
+  title: IoT Device Repository
+  termsOfService: http://swagger.io/terms/
+  description: 'The IOT Device Repository provides metadata for all IOT devices managed on the platform, their device classes and the associated data structures for the user.'
+  version: '1.0'
+  contact:
+    name: sh20xyqi
+    email: sh20xyqi@studserv.uni-leipzig.de
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+schemes:
+  - https
+
+host: api.sepl.infai.org
+
+basePath: /iot-device-repo
+
+produces:
+  - text/plain
+
+tags:
+  - name: deviceInstanceApi
+    description: Operations which belong to the set deviceInstanceApi
+  - name: deviceTypeApi
+    description: Operations which belong to the set deviceTypeApi
+  - name: otherStructs
+    description: Operations which belong to the set otherStructs
+  - name: search
+    description: Operations which belong to the set search
+
+
+#Everything that belongs to iot-device-repository API
+paths:
+  #Everything that belongs to deviceInstanceApi
+  #Everything that belongs to deviceInstanceApi/crudApi.go
+  /deviceInstance:
+    post:
+      tags:
+        - deviceInstanceApi
+      summary:
+        Add a new device instance.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Device instance object that needs to be added to the database.
+        required: true
+        schema:
+          $ref: '#/definitions/DeviceInstance'
+      responses:
+        200:
+          description: Returns the instanciated device instance.
+          schema:
+            $ref: '#/definitions/DeviceInstance'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - JSON encoding failed; DeviceInstance is not valid;  DeviceInstance is not consistent; DeviceInstance can not be instanciated.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deviceInstance/{id}:
+    post:
+      tags:
+        - deviceInstanceApi
+      summary:
+        Updates device instance by Id.
+      description:
+        ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the the to be updated device instance.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Device instance object that needs to be updated.
+          required: true
+          schema:
+            $ref: '#/definitions/DeviceInstance'
+      responses:
+        200:
+          description: Returns that the device instance that has been modified.
+          schema:
+            $ref: '#/definitions/DeviceInstance'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceInstance is not valid;  DeviceInstance is not consistent; DeviceInstance can not be instanciated.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+    get:
+      tags:
+        - deviceInstanceApi
+      summary:
+        Returns device instance by Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the the to be returned device instance.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the device instance behind the passed ID.
+          schema:
+            $ref: '#/definitions/DeviceInstance'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceInstance is not valid;  DeviceInstance is not consistent; DeviceInstance can not be instanciated.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+    delete:
+      tags:
+        - deviceInstanceApi
+      summary:
+        Deletes device instance by Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the the to be deleted device instance.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Deletes the device instance behind the passed ID.
+          schema:
+            $ref: '#/definitions/DeviceInstance'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceInstance can not be found in database; DeviceInstance can not be deleted in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deviceInstances/{limit}/{offset}:
+    get:
+      tags:
+        - deviceInstanceApi
+      summary:
+        Returns device instances within a limit and how much elements had to be skipped.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: limit
+          in: path
+          description: Restricts the set of returnable elements to the passed limit.
+          required: true
+          type: integer
+        - name: offset
+          in: path
+          description: Specifies how many elements of the set are skipped.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Returns  a sorted list of device instances.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeviceInstance'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - A specific limit can not be found; a specific offset can not be found; a list of device instances can not be returned.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  #Everything that belongs to deviceInstanceApi/guiApi.go
+  /ui/deviceInstance/resourceSkeleton/{deviceTypeId}:
+    get:
+      tags:
+        - deviceInstanceApi
+      summary:
+        Returns an empty instance by using the device type id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: deviceTypeId
+          in: path
+          description: Identifies the device type by id and creates an to be returned empty instance.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the empty instance.
+          schema:
+            $ref: '#/definitions/DeviceInstance'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceTypeId can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /url_to_devices/{device}:
+    get:
+      tags:
+        - deviceInstanceApi
+      summary:
+        Returns the device service entity by using the device.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: device
+          in: path
+          description: Identifies the device in the database.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the device service entity.
+          schema:
+            $ref: '#/definitions/DeviceServiceEntity'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceServiceEntity can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /bydevicetype/deviceInstances/{devicetype}:
+    get:
+      tags:
+        - deviceInstanceApi
+      summary:
+        Returns a sorted list containing all device instances.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: devicetype
+          in: path
+          description: Identifies the to be returned list of device instances by using the passed device type.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the specific sorted list.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeviceInstance'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceType can not be found in database; DeviceInstance can not be found in database when using its Id.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  #Everything that belongs to deviceTypeApi
+  #Everything that belongs to deviceTypeApi/crudApi.go
+  /deviceType:
+    post:
+      tags:
+        - deviceTypeApi
+      summary:
+        Returns a sorted list containing all device instances.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Device type object that needs to be added to the database.
+        required: true
+        schema:
+          $ref: '#/definitions/DeviceType'
+      responses:
+        200:
+          description: Returns the instanciated device type.
+          schema:
+            $ref: '#/definitions/DeviceType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - JSON encoding failed; DeviceType is not valid;  DeviceType is not consistent; DeviceType can not be instanciated.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deviceType/{id}:
+    get:
+      tags:
+        - deviceTypeApi
+      summary:
+        Returns a sorted list containing all device instances.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the to be returned device type.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the device type that belongs to the id.
+          schema:
+            $ref: '#/definitions/DeviceType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceType can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+    post:
+      tags:
+        - deviceTypeApi
+      summary:
+        Updates device type by Id.
+      description:
+        ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the to be modified device type.
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Device type object that needs to be updated.
+          required: true
+          schema:
+            $ref: '#/definitions/DeviceType'
+      responses:
+        200:
+          description: Returns the modified device type.
+          schema:
+            $ref: '#/definitions/DeviceType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceType is not valid;  DeviceType is not consistent; DeviceType can not be instanciated.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+    delete:
+      tags:
+        - deviceTypeApi
+      summary:
+        Deletes device type by Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the the to be deleted device type.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Deletes the device type behind the passed ID.
+          schema:
+            $ref: '#/definitions/DeviceType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - DeviceType can not be found in database; dependend device instances exist; DeviceType can not be deleted.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deviceType/{id}/{depth}:
+    get:
+      tags:
+        - deviceTypeApi
+      summary:
+        ''
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the the to be returned device type.
+          required: true
+          type: string
+        - name: depth
+          in: path
+          description: ''
+          required: true
+          type: integer
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/DeviceType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Depth can not be found in database or can not be converted into string; Id and depth results an error when getting device type from database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /deviceTypes/{limit}/{offset}:
+    get:
+      tags:
+        - deviceTypeApi
+      summary:
+        Returns device types within a limit and how much elements had to be skipped.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: limit
+          in: path
+          description: Restricts the set of returnable elements to the passed limit.
+          required: true
+          type: integer
+        - name: offset
+          in: path
+          description: Specifies how many elements of the set are skipped.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Returns a sorted list of device types.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeviceType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - A specific limit can not be found; a specific offset can not be found; a DeviceDeviceList can not be returned.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /service/{id}:
+    get:
+      tags:
+        - deviceTypeApi
+      summary:
+        Returns service by Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: identifies the to be returned service.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the service behind the passed Id.
+          schema:
+            $ref: '#/definitions/Service'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - Service can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  #Everything that belongs to deviceTypeApi/guiApi.go
+  /ui/deviceType/alowedvalues:
+    get:
+      tags:
+        - deviceTypeApi
+      summary:
+        Returns the allowed values.
+      description:
+        ''
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns the allowed values.
+          schema:
+            $ref: '#/definitions/AllowValues'
+  #Everything that belongs to otherStructs
+  #Everything that belongs to otherStructs/create.go
+  /other/vendor:
+    post:
+      tags:
+        - otherStructs
+      summary:
+        Adds a new vendor.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Vendor object that needs to be added to the database.
+        required: true
+        schema:
+          $ref: '#/definitions/Vendor'
+      responses:
+        200:
+          description: Returns the instanciated vendor Id.
+          schema:
+            $ref: '#/definitions/Insert_OK'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - JSON encoding failed; Vendor instance can not created in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /other/protocol:
+    post:
+      tags:
+        - otherStructs
+      summary:
+        Adds a new protocol.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Protocol object that needs to be added to the database.
+        required: true
+        schema:
+          $ref: '#/definitions/Protocol'
+      responses:
+        200:
+          description: Returns the instanciated protocol Id.
+          schema:
+            $ref: '#/definitions/Insert_OK'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - JSON encoding failed; Protocol instance can not created in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /other/deviceclass:
+    post:
+      tags:
+        - otherStructs
+      summary:
+        Adds a new device class.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Device class object that needs to be added to the database.
+        required: true
+        schema:
+          $ref: '#/definitions/DeviceClass'
+      responses:
+        200:
+          description: Returns the instanciated device class Id.
+          schema:
+            $ref: '#/definitions/Insert_OK'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - JSON encoding failed; Device class instance can not created in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /other/valueType:
+    post:
+      tags:
+        - otherStructs
+      summary:
+        Adds a new value type.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Value type object that needs to be added to the database.
+        required: true
+        schema:
+          $ref: '#/definitions/ValueType'
+      responses:
+        200:
+          description: Returns the instanciated value type Id.
+          schema:
+            $ref: '#/definitions/Insert_OK'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - JSON encoding failed; Value type instance can not created in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /valueType/{id}:
+    delete:
+        tags:
+          - otherStructs
+        summary:
+          Deletes valueType if no dependent valueTypes or deviceTypes exist.
+        description:
+          ''
+        produces:
+          - application/json
+        parameters:
+          - name: id
+            in: path
+            description: Identifies the valueType to be deleted.
+            required: true
+            type: string
+        responses:
+          200:
+            description: valueType deleted.
+            schema:
+              type: string
+          500:
+            description: Returns an ErrorMessage containing further information about the specific error.
+            schema:
+              $ref: '#/definitions/ErrorMessage'
+    get:
+      tags:
+        - otherStructs
+      summary:
+        Returns valueType by Id.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Identifies the to be returned value type.
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the valueType behind the passed Id.
+          schema:
+            $ref: '#/definitions/ValueType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - ValueType can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /valueTypes/{limit}/{offset}:
+    get:
+      tags:
+        - otherStructs
+      summary:
+        Returns value types within a limit and how much elements had to be skipped.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: limit
+          in: path
+          description: Restricts the set of returnable elements to the passed limit.
+          required: true
+          type: integer
+        - name: offset
+          in: path
+          description: Specifies how many elements of the set are skipped.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Returns a sorted list of value types.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ValueType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - A specific limit can not be found; a specific offset can not be found; a list of ValueTypes can not be returned.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  #Everything that belongs to search
+  #Everything that belongs to search/search.go
+  /ui/search/deviceTypes/{query}/{limit}/{offset}:
+    get:
+      tags:
+        - search
+      summary:
+        Returns device types that use a specific query, within a limit and how much elements had to be skipped.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: query
+          in: path
+          description: Identifies all device types that use this specific query.
+          required: true
+          type: string
+        - name: limit
+          in: path
+          description: Restricts the set of returnable elements to the passed limit.
+          required: true
+          type: integer
+        - name: offset
+          in: path
+          description: Specifies how many elements of the set are skipped.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Returns all device types matched with the passed query.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ValueType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - A specific limit can not be found; a specific offset can not be found; DeviceTypes can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /ui/search/deviceInstances/{query}/{limit}/{offset}:
+    get:
+      tags:
+        - search
+      summary:
+        Returns device instances that use a specific query, within a limit and how much elements had to be skipped.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: query
+          in: path
+          description: Identifies all device instances that use this specific query.
+          required: true
+          type: string
+        - name: limit
+          in: path
+          description: Restricts the set of returnable elements to the passed limit.
+          required: true
+          type: integer
+        - name: offset
+          in: path
+          description: Specifies how many elements of the set are skipped.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Returns all device instances matched with the passed query.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeviceInstance'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - A specific limit can not be found; a specific offset can not be found; DeviceInstances can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /ui/search/ValueTypes/{query}/{limit}/{offset}:
+    get:
+      tags:
+        - search
+      summary:
+        Returns value types that use a specific query, within a limit and how much elements had to be skipped.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: query
+          in: path
+          description: Identifies all value types that use this specific query.
+          required: true
+          type: string
+        - name: limit
+          in: path
+          description: Restricts the set of returnable elements to the passed limit.
+          required: true
+          type: integer
+        - name: offset
+          in: path
+          description: Specifies how many elements of the set are skipped.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Returns all value types matched with the passed query.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ValueType'
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - A specific limit can not be found; a specific offset can not be found; ValueTypes can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /ui/search/others/{type}/{query}/{limit}/{offset}:
+    get:
+      tags:
+        - search
+      summary:
+        Returns a selectable type of information structure that use a specific query, within a limit and how much elements had to be skipped.
+      description:
+        ''
+      produces:
+        - application/json
+      parameters:
+        - name: type
+          in: path
+          description: Identifies the selectable information structure. This can be vendors, deviceClasses, protocols or a new, unknown type.
+          required: true
+          type: string
+        - name: query
+          in: path
+          description: Identifies all type of information structures / instances that use this specific query.
+          required: true
+          type: string
+        - name: limit
+          in: path
+          description: Restricts the set of returnable elements to the passed limit.
+          required: true
+          type: integer
+        - name: offset
+          in: path
+          description: Specifies how many elements of the set are skipped.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Returns all elements of the selectable information strucutre matched with the passed query.
+          schema:
+            $ref: ''
+        500:
+          description: Returns an ErrorMessage containing further information about the specific error. This error could be - A specific limit can not be found; a specific offset can not be found; selectable information structure can not be found in database.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+#Everything that belongs to definitions
+definitions:
+  MsgSegment:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      constraints:
+        type: array
+        items:
+          type: string
+    required:
+      - id
+      - name
+      - constraints
+  Protocol:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      protocol_handler_url:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      description:
+        type: string
+        format: string
+      msg_structure:
+        type: array
+        items:
+          $ref: '#/definitions/MsgSegment'
+    required:
+      - id
+      - protocol_handler_url
+      - name
+      - description
+      - msg_structure
+  DeviceServiceEntity:
+    type: object
+    properties:
+      device:
+        type: object
+        format: '#/definitions/DeviceInstance'
+      services:
+        type: array
+        items:
+          $ref: '#/definitions/ShortService'
+    required:
+      - device
+      - services
+  ShortService:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      service_type:
+        type: string
+        format: string
+      url:
+        type: string
+        format: string
+    required:
+      - id
+      - service_type
+      - url
+  ShortServiceType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      services:
+        type: array
+        items:
+          $ref: '#/definitions/ShortService'
+    required:
+      - id
+      - services
+  Service:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      service_type:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      description:
+        type: string
+        format: string
+      protocol:
+        type: object
+        format: '#/definitions/Protocol'
+      input:
+        type: array
+        items:
+          $ref: '#/definitions/TypeAssignment'
+      output:
+        type: array
+        items:
+          $ref: '#/definitions/TypeAssignment'
+      url:
+        type: string
+        format: string
+    required:
+      - id
+      - service_type
+      - name
+      - description
+      - protocol
+      - input
+      - output
+      - url
+  AdditionalFormatInfo:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      field:
+        type: object
+        format: '#/definitions/FieldType'
+      format_flag:
+        type: string
+        format: string
+    required:
+      - id
+      - field
+      - format_flag
+  TypeAssignment:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      msg_segment:
+        type: object
+        format: '#/definitions/MsgSegment'
+      type:
+        type: object
+        format: '#/definitions/ValueType'
+      format:
+        type: string
+        format: string
+      additional_formatinfo:
+        type: array
+        items:
+          $ref: '#/definitions/AdditionalFormatInfo'
+    required:
+      - id
+      - name
+      - msg_segment
+      - type
+      - format
+      - additional_formatinfo
+  DeviceType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      description:
+        type: string
+        format: string
+      device_class:
+        type: object
+        format: '#/definitions/DeviceClass'
+      services:
+        type: array
+        items:
+          $ref: '#/definitions/Service'
+      vendor:
+        type: object
+        format: '#/definitions/Vendor'
+      config_parameter:
+        type: array
+        items:
+          $ref: '#/definitions/ConfigFieldType'
+    required:
+      - id
+      - name
+      - description
+      - device_class
+      - services
+      - vendor
+      - config_parameter
+  DeviceInstance:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      device_type:
+        type: string
+        format: string
+      config:
+        type: array
+        items:
+          $ref: '#/definitions/ConfigField'
+      uri:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+      - device_type
+      - config
+      - uri
+  SmartObject:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+  Format:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+  Vendor:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+  DeviceClass:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+  ConfigField:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      value:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+      - value
+  ConfigFieldType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+  FieldType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      type:
+        type: object
+        format: '#/definitions/ValueType'
+    required:
+      - id
+      - name
+      - type
+  ValueType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: string
+      name:
+        type: string
+        format: string
+      description:
+        type: string
+        format: string
+      base_type:
+        type: string
+        format: string
+      fields:
+        type: array
+        items:
+          $ref: '#/definitions/FieldType'
+      literal:
+        type: string
+        format: string
+    required:
+      - id
+      - name
+      - description
+      - base_type
+      - fields
+      - literal
+  AllowValues:
+    type: object
+    properties:
+      service_types:
+        type: array
+        items:
+          $ref: '#definitions/SmartObject'
+      formats:
+        type: array
+        items:
+          $ref: '#/definitions/Format'
+      primitive:
+        type: array
+        items:
+          type: string
+      collections:
+        type: array
+        items:
+          type: string
+      structures:
+        type: array
+        items:
+          type: string
+      map:
+        type: array
+        items:
+          type: string
+      set:
+        type: array
+        items:
+          type: string
+    required:
+      - service_types
+      - formats
+      - primitive
+      - collections
+      - structures
+      - map
+      - set
+  ErrorMessage:
+    type: object
+    properties:
+      status_code:
+        type: integer
+        format: int32
+      message:
+        type: string
+        format: string
+      error_code:
+        type: string
+        format: string
+      detail:
+        type: array
+        items:
+          type: string
+    required:
+      - status_code
+      - message
+      - error_code
+      - detail
+  Insert_OK:
+    type: object
+    properties:
+      created_id:
+        type: string
+        format: string
+    required:
+      - created_id

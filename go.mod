@@ -1,0 +1,31 @@
+module github.com/SmartEnergyPlatform/iot-device-repository
+
+require (
+	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78
+	github.com/Microsoft/go-winio v0.4.8
+	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5
+	github.com/SmartEnergyPlatform/amqp-wrapper-lib v0.0.0-20181018071408-32e07d9d89bb
+	github.com/SmartEnergyPlatform/jwt-http-router v0.0.0-20181018071703-2fca7308e21f
+	github.com/SmartEnergyPlatform/util v0.0.0-20181018070938-b26ca656886c
+	github.com/bouk/monkey v0.0.0-20170901202551-b96e337f6e5b
+	github.com/cbroglie/mustache v0.0.0-20180122045544-2eb171290cbd
+	github.com/cenkalti/backoff v2.0.0+incompatible
+	github.com/containerd/continuity v0.0.0-20180612233548-246e49050efd
+	github.com/dgrijalva/jwt-go v3.1.0+incompatible
+	github.com/docker/go-connections v0.3.0
+	github.com/docker/go-units v0.3.3
+	github.com/knakk/digest v0.0.0-20160404164910-fd45becddc49
+	github.com/knakk/rdf v0.0.0-20171130200148-b6ee24f8f40f
+	github.com/knakk/sparql v0.0.0-20170625101756-3de19ad6a5dc
+	github.com/opencontainers/go-digest v1.0.0-rc1
+	github.com/opencontainers/image-spec v1.0.1
+	github.com/opencontainers/runc v0.1.1
+	github.com/ory/dockertest v3.3.2+incompatible
+	github.com/pkg/errors v0.8.0
+	github.com/satori/go.uuid v1.2.0
+	github.com/sirupsen/logrus v1.0.5
+	github.com/streadway/amqp v0.0.0-20180315184602-8e4aba63da9f
+	golang.org/x/crypto v0.0.0-20180621125126-a49355c7e3f8
+	golang.org/x/net v0.0.0-20180629035331-4cb1c02c05b0
+	golang.org/x/sys v0.0.0-20180627142611-7138fd3d9dc8
+)

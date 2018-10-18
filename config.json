@@ -1,0 +1,29 @@
+{
+    "ServerPort" : "8080",
+    "LogLevel" : "CALL",
+    "SparqlEndpoint": "http://iot-ontology:8890/sparql",
+    "RdfGraph": "iot",
+    "RdfUser": "dba",
+    "RdfPW": "myDbaPassword",
+    "GeneratVendor": "iot#24e5bb75-6d18-4e4e-87eb-ea4e554a14fb",
+    "GeneratDeviceClass": "iot#042fffe4-ecb6-42a0-8d9b-09c68804baca",
+    "ForceUser": "true",
+    "ForceAuth": "true",
+
+    "AmqpUrl": "amqp://guest:guest@rabbitmq:5672/",
+    "AmqpReconnectTimeout ": 10,
+    "AmqpConsumerName": "iotrepo",
+    "DeviceInstanceTopic": "deviceinstance",
+    "DeviceTypeTopic": "devicetype",
+    "ValueTypeTopic": "valuetype",
+    "GatewayTopic": "gateway",
+    "DeviceInstanceDtFieldSearchName": "devicetype",
+    "DeviceInstanceUrlFieldSearchName": "uri",
+    "DeviceTypeServiceFieldSearchName": "service",
+    "DeviceTypeMaintenanceFieldSearchName": "maintenance",
+
+    "PermissionsUrl": "http://permissionsearch:8080",
+    "DefaultPermissionsUser": "336508f3-e2ef-4aff-9627-e844a4c2de51",
+
+    "FlushOnStartup": "true"
+}
