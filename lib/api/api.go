@@ -43,7 +43,7 @@ func Init(db interfaces.Persistence) {
 		db.FlushValueTypes()
 	}
 	log.Println("start server on port: ", util.Config.ServerPort)
-	httpHandler := getRoutes(db)
+	httpHandler := GetRoutes(db)
 	corsHandler := cors.New(httpHandler)
 	logger := logger.New(corsHandler, util.Config.LogLevel)
 	if util.Config.DecodeUrlFix == "true" {
@@ -55,7 +55,7 @@ func Init(db interfaces.Persistence) {
 	}
 }
 
-func getRoutes(db interfaces.Persistence) *jwt_http_router.Router {
+func GetRoutes(db interfaces.Persistence) *jwt_http_router.Router {
 
 	router := jwt_http_router.New(jwt_http_router.JwtConfig{PubRsa: util.Config.JwtPubRsa, ForceAuth: util.Config.ForceAuth == "true", ForceUser: util.Config.ForceUser == "true"})
 

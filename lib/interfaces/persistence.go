@@ -74,6 +74,8 @@ type Persistence interface {
 	CreateDeviceClass(model.DeviceClass) (id string, err error)
 	ListDeviceClass(limit int, offset int) ([]model.DeviceClass, error)
 	ListVendor(limit int, offset int) ([]model.Vendor, error)
+	DeleteVendor(id string) error
+	DeleteDeviceClass(id string) error
 
 	//gateway
 	GetGateway(id string) (model.Gateway, error)

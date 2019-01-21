@@ -79,7 +79,7 @@ func (this *AssertionsHandler) Log(lvl int, args ...interface{}) {
 }
 
 func (this *AssertionsHandler) Error(lvl int, args ...interface{}) {
-	this.Log(1+lvl, args)
+	this.Log(1+lvl, args...)
 	this.t.Fail()
 }
 

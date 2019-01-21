@@ -45,7 +45,10 @@ func other(router *jwt_http_router.Router, db interfaces.Persistence) {
 			response.To(res).DefaultError(err.Error(), http.StatusBadRequest)
 			return
 		}
-
+		if element.Name == "" {
+			response.To(res).DefaultError("missing name in request", http.StatusBadRequest)
+			return
+		}
 		id, err := db.CreateVendor(element)
 		if err != nil {
 			response.To(res).DefaultError(err.Error(), http.StatusInternalServerError)
@@ -53,6 +56,20 @@ func other(router *jwt_http_router.Router, db interfaces.Persistence) {
 		}
 
 		response.To(res).Json(Insert_OK{CreatedId: id})
+	})
+
+	router.DELETE("/other/vendor/:id", func(res http.ResponseWriter, r *http.Request, ps jwt_http_router.Params, jwt jwt_http_router.Jwt) {
+		if !contains(jwt.RealmAccess.Roles, "admin") {
+			response.To(res).DefaultError("access denied", http.StatusUnauthorized)
+			return
+		}
+		err := db.DeleteVendor(ps.ByName("id"))
+		if err != nil {
+			response.To(res).DefaultError(err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		response.To(res).Text("ok")
 	})
 
 	router.POST("/other/protocol", func(res http.ResponseWriter, r *http.Request, ps jwt_http_router.Params, jwt jwt_http_router.Jwt) {
@@ -79,7 +96,10 @@ func other(router *jwt_http_router.Router, db interfaces.Persistence) {
 			response.To(res).DefaultError(err.Error(), http.StatusBadRequest)
 			return
 		}
-
+		if element.Name == "" {
+			response.To(res).DefaultError("missing name in request", http.StatusBadRequest)
+			return
+		}
 		id, err := db.CreateDeviceClass(element)
 		if err != nil {
 			response.To(res).DefaultError(err.Error(), http.StatusInternalServerError)
@@ -87,6 +107,20 @@ func other(router *jwt_http_router.Router, db interfaces.Persistence) {
 		}
 
 		response.To(res).Json(Insert_OK{CreatedId: id})
+	})
+
+	router.DELETE("/other/deviceclass/:id", func(res http.ResponseWriter, r *http.Request, ps jwt_http_router.Params, jwt jwt_http_router.Jwt) {
+		if !contains(jwt.RealmAccess.Roles, "admin") {
+			response.To(res).DefaultError("access denied", http.StatusUnauthorized)
+			return
+		}
+		err := db.DeleteDeviceClass(ps.ByName("id"))
+		if err != nil {
+			response.To(res).DefaultError(err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		response.To(res).Text("ok")
 	})
 
 	router.POST("/other/valueType", func(res http.ResponseWriter, r *http.Request, ps jwt_http_router.Params, jwt jwt_http_router.Jwt) {

@@ -73,3 +73,33 @@ func (this *Persistence) GetProtocolByUri(uri string) (result model.Protocol, er
 	err = this.ordf.SelectDeep(&result)
 	return
 }
+
+func (this *Persistence) GetVendor(id string) (result model.Vendor, err error) {
+	result.Id = id
+	err = this.ordf.SelectLevel(&result, -1)
+	return
+}
+
+func (this *Persistence) GetDeviceClass(id string) (result model.DeviceClass, err error) {
+	result.Id = id
+	err = this.ordf.SelectLevel(&result, -1)
+	return
+}
+
+func (this *Persistence) DeleteVendor(id string) error {
+	element, err := this.GetVendor(id)
+	if err != nil {
+		return err
+	}
+	_, err = this.ordf.Delete(element)
+	return err
+}
+
+func (this *Persistence) DeleteDeviceClass(id string) error {
+	element, err := this.GetDeviceClass(id)
+	if err != nil {
+		return err
+	}
+	_, err = this.ordf.Delete(element)
+	return err
+}
