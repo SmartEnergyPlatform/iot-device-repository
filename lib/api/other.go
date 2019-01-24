@@ -195,7 +195,38 @@ func other(router *jwt_http_router.Router, db interfaces.Persistence) {
 		msg := model.TypeAssignment{}
 		err := json.NewDecoder(r.Body).Decode(&msg)
 		if err != nil {
+			response.To(res).DefaultError(err.Error(), http.StatusBadRequest)
+		}
+		result, err := format.GetFormatExample(db, msg)
+		if err != nil {
 			response.To(res).DefaultError(err.Error(), 500)
+		} else {
+			response.To(res).Text(result)
+		}
+	})
+
+	// evaluates request and responds on invalid requests with plain text messages and status code 200
+	router.POST("/format/preview", func(res http.ResponseWriter, r *http.Request, ps jwt_http_router.Params, jwt jwt_http_router.Jwt) {
+		msg := model.TypeAssignment{}
+		err := json.NewDecoder(r.Body).Decode(&msg)
+		if err != nil {
+			response.To(res).DefaultError(err.Error(), http.StatusBadRequest)
+		}
+		if msg.Name == "" {
+			response.To(res).Text("error: missing name")
+			return
+		}
+		if msg.Type.Id == "" {
+			response.To(res).Text("error: missing ValueType")
+			return
+		}
+		if msg.Format == "" {
+			response.To(res).Text("error: missing Format")
+			return
+		}
+		if msg.MsgSegment.Id == "" {
+			response.To(res).Text("error: missing MessageSegment")
+			return
 		}
 		result, err := format.GetFormatExample(db, msg)
 		if err != nil {
