@@ -230,7 +230,7 @@ func other(router *jwt_http_router.Router, db interfaces.Persistence) {
 		}
 		result, err := format.GetFormatExample(db, msg)
 		if err != nil {
-			response.To(res).DefaultError(err.Error(), 500)
+			response.To(res).Text(err.Error())
 		} else {
 			response.To(res).Text(result)
 		}
