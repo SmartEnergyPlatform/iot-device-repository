@@ -17,6 +17,7 @@
 package persistence
 
 import (
+	"github.com/SmartEnergyPlatform/iot-device-repository/lib/format"
 	"log"
 	"reflect"
 
@@ -130,14 +131,14 @@ func (this *Persistence) TypeAssignmentIsConsistent(assignment model.TypeAssignm
 	if assignment.Name == "" {
 		return false, "missing name for assignment"
 	}
-	format := model.Format{Id: assignment.Format}
-	isFormatId, err := this.ordf.IdIsOfClass(format)
+	formatId := model.Format{Id: assignment.Format}
+	isFormatId, err := this.ordf.IdIsOfClass(formatId)
 	if err != nil {
 		log.Println(err)
-		return false, "error on format id check"
+		return false, "error on formatId id check"
 	}
 	if !isFormatId {
-		return false, "unknown format id"
+		return false, "unknown formatId id"
 	}
 
 	err = this.ValueTypeIsConsistent(assignment.Type)
@@ -152,6 +153,12 @@ func (this *Persistence) TypeAssignmentIsConsistent(assignment model.TypeAssignm
 	}
 	if !isMsgSegmentId {
 		return false, "unknown msgSegment id"
+	}
+
+	//check if formatting is possible
+	_, err = format.GetFormatExample(this, assignment)
+	if err != nil {
+		return false, err.Error()
 	}
 
 	return true, ""
