@@ -299,6 +299,25 @@ func deviceinstance(router *jwt_http_router.Router, db interfaces.Persistence) {
 		response.To(res).Json(entities)
 	})
 
+	router.GET("/url_to_devices/:device_url/execute", func(res http.ResponseWriter, r *http.Request, ps jwt_http_router.Params, jwt jwt_http_router.Jwt) {
+		device_url := ps.ByName("device_url")
+		entities := []model.DeviceServiceEntity{}
+		ids, err := permission.SelectFieldAll(jwt, util.Config.DeviceInstanceTopic, util.Config.DeviceInstanceUrlFieldSearchName, device_url, model.EXECUTE)
+		if err != nil {
+			response.To(res).DefaultError(err.Error(), http.StatusInternalServerError)
+			return
+		}
+		for _, id := range ids {
+			entity, err := db.GetDeviceServiceEntity(id.Id)
+			if err != nil {
+				response.To(res).DefaultError(err.Error(), http.StatusInternalServerError)
+				return
+			}
+			entities = append(entities, entity)
+		}
+		response.To(res).Json(entities)
+	})
+
 	router.POST("/endpoint/in", func(res http.ResponseWriter, r *http.Request, ps jwt_http_router.Params, jwt jwt_http_router.Jwt) {
 		var e model.Endpoint
 		err := json.NewDecoder(r.Body).Decode(&e)
